@@ -1,0 +1,22 @@
+{
+    "name": "@cyxth/web",
+    "version": "0.0.1",
+    "homepage": "https://cyxth.com/docs/v0_0_5_rc0/getting-started",
+    "icon": "https://cyxth.com/favicons/android-chrome-512x512.png",
+    "markdown": "github",
+    "readme": "README.md",
+    "description": "fast and scalable realtime collaboration apis",
+    "main": "dist/index.min.js",
+    "scripts": {},
+    "keywords": [
+        "cyxth",
+        "realtime",
+        "collaboration",
+        "chat",
+        "call"
+    ],
+    "author": "cyxthdev",
+    "license": "BSD-3-Clause",
+    "type": "module",
+    "types": "@types"
+}
