@@ -10,3 +10,5 @@ a monorepo containing cyxth javascript sdks
 
 - [`@cyxth/node`](./node/README.md) - cyxth node backend sdk & apis  
 - [`@cyxth/web`](./web/README.md) - cyxth web sdk  
+
+auto generated from npm `@cyxth`
