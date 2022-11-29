@@ -1,7 +1,10 @@
 {
     "name": "@cyxth/node",
-    "version": "0.0.1",
-    "homepage": "https://cyxth.com/docs/v0_0_5_rc0/getting-started",
+    "version": "0.0.2-alpha0",
+    "homepage": "https://cyxth.com/docs",
+    "repository": {
+        "url": "https://github.com/cyxth/js-clients"
+    },
     "icon": "https://cyxth.com/favicons/android-chrome-512x512.png",
     "markdown": "github",
     "readme": "README.md",
@@ -15,7 +18,7 @@
         "chat",
         "call"
     ],
-    "author": "cyxthdev",
+    "author": "cyxthdev <dev@cyxth.com>",
     "license": "BSD-3-Clause",
     "dependencies": {
         "jsonwebtoken-esm": "^1.0.3"

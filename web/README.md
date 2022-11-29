@@ -6,4 +6,4 @@
 cyxth is still in development and the api is subject to change. please don't use it in production yet.
 </div>
 
-*wip*
+[docs](https://cyxth.com/docs)
