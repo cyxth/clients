@@ -1,4 +1,6 @@
-import Call, { CallOptions } from "./call";
+import Call, { CallOptions } from './call';
+import { MessageDelete, MessageDeleteOptions, MessageDeleted, MessageEditOptions, MessageEdited, MessageOptions, SendMessage, MessageUpdate } from './messages';
+import { Channel, ChannelLeft, ChannelCretateOptions, ChannelDeleteOptions, ChannelJoinOptions, ChannelModerationOptions, ChannelUpdateOptions } from './channels';
 declare class Cxyth {
     #private;
     /**
@@ -29,14 +31,14 @@ declare class Cxyth {
      *
      * @param messageId message id to delete
      */
-    deleteMessage(messageId: string, options: MessageDeleteOptions): Promise<MessageDeleted>;
+    deleteMessage(message: MessageDelete, options?: MessageDeleteOptions): Promise<MessageDeleted>;
     /**
-     *
-     * @param messageId message to edit | one must be message author
+     * edit a message | one must be message author
+     * @param messageId message to edit
      * @param options edit options
      * @returns Promise message edited object or error |
      */
-    editMessage(messageId: string, options: MessageEditOptions): Promise<MessageEdited>;
+    editMessage(message: MessageUpdate, options?: MessageEditOptions): Promise<MessageEdited>;
     /**
      * send a message in a cyxth channel
      * @param channel channel to send message to
@@ -51,11 +53,18 @@ declare class Cxyth {
      * @returns a call object
      */
     startCall(channel: string, options: CallOptions): Promise<Call>;
+    /**
+     * get channel updates i.e when user was offline or disconnected
+     * @param channels channels to get state for
+     * @param date start date
+     * @param duration duration(from the start date)
+     * @returns all updates in a channel
+     */
     getState(channels: string[], date: string, duration: number): Promise<unknown>;
     /**
-    * get channels user is in
-    * @returns an array of channels user is in
-    */
+     * get channels user is in
+     * @returns an array of channels user is in
+     */
     getChannels(): Promise<string[]>;
     /**
      * create a new channel
@@ -106,16 +115,4 @@ interface TokenData {
 /**
  * cyxth events
  */
-type CyxthEvent = "message" | "call";
-/**
- * SendMessage
- */
-interface SendMessage {
-    text: string;
-    media?: any;
-}
-/**
- * message sending options
- */
-interface MessageOptions {
-}
+type CyxthEvent = 'message' | 'call';

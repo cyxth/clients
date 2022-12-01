@@ -10,7 +10,7 @@ interface Channel {
  * channel creation options
  */
 interface ChannelCretateOptions extends Channel {
-    type: "open" | "private" | "restricted";
+    type: 'open' | 'private' | 'restricted';
     members?: string[];
     bio?: string;
     banner?: string;
@@ -30,3 +30,4 @@ interface ChannelUpdateOptions {
  */
 interface ChannelLeft {
 }
+export { Channel, ChannelLeft, ChannelCretateOptions, ChannelDeleteOptions, ChannelJoinOptions, ChannelModerationOptions, ChannelUpdateOptions };
