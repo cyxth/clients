@@ -5,6 +5,7 @@ interface Channel {
     id: string;
     name: string;
     logo?: string;
+    permissions?: number;
 }
 /**
  * channel creation options
@@ -16,12 +17,13 @@ interface ChannelCretateOptions extends Channel {
     banner?: string;
 }
 interface ChannelJoinOptions {
-    user_id: string;
     token?: string;
 }
 interface ChannelDeleteOptions {
 }
 interface ChannelModerationOptions {
+    userIds: string[];
+    mode: number;
 }
 interface ChannelUpdateOptions {
 }

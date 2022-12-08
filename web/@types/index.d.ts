@@ -67,6 +67,11 @@ declare class Cxyth {
      */
     getChannels(): Promise<string[]>;
     /**
+     * get all open channels
+     * @returns an array of all open channels
+     */
+    listChannels(): Promise<Channel[]>;
+    /**
      * create a new channel
      */
     createChannel(channel: ChannelCretateOptions): Promise<Channel>;
@@ -75,11 +80,10 @@ declare class Cxyth {
      *  else a user must have an invite token from the channel_admin| moderator | member
      * @param channelId channel to join
      */
-    joinChannel(channelId: string, options: ChannelJoinOptions): Promise<Channel>;
+    joinChannel(channelId: string, options?: ChannelJoinOptions): Promise<Channel>;
     /**
      * leave a given channel
      * will fail if user is not in channel
-     *  when channel creators leave the channel is deleted if no admin is left by default
      * @param channelId channel to leave
      */
     leaveChannel(channelId: string): Promise<ChannelLeft>;
@@ -89,13 +93,22 @@ declare class Cxyth {
      * @param channelId channel to delete
      * @param options deletion options
      */
-    deleteChannel(channelId: string, options?: ChannelDeleteOptions): Promise<unknown>;
+    deleteChannel(channelId: string, options?: ChannelDeleteOptions): Promise<ChannelLeft>;
     /**
      * do channel moderation i.e mute users, create invite_tokens, modify user permissions ... etc
      * @param channelId channel to moderate
      * @param options moderation options
      */
-    moderateChannel(channelId: string, options: ChannelModerationOptions): Promise<unknown>;
+    moderateChannel(channelId: string, options: ChannelModerationOptions): Promise<any>;
+    /**
+     *  add users to a channel
+     *  added users have permissions to send and receive messages in public + private channels
+     *  and receive only permissions in broadcast channels
+     *  to add more permissions use `moderateChannel` function
+     * @param channelId channel id
+     * @param users users array
+     */
+    addUsers(channelId: string, userIds: string[]): Promise<unknown>;
     /**
      * update a channel
      * @param channelId
