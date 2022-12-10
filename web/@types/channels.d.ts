@@ -23,7 +23,14 @@ interface ChannelDeleteOptions {
 }
 interface ChannelModerationOptions {
     userIds: string[];
-    mode: number;
+    mode: PermissionMode;
+}
+declare enum PermissionMode {
+    block = 0,
+    send_recv = 600,
+    send_only = 200,
+    recv_only = 400,
+    admin = 700
 }
 interface ChannelUpdateOptions {
 }

@@ -24,6 +24,31 @@ declare class Call {
      * end or leave a given call
      */
     endCall(): void;
+    /**
+     * share screen | tab | window
+     */
+    startShare(): Promise<unknown>;
+    /**
+     * stop sharing screen | tab | window
+     */
+    stopShare(): Promise<unknown>;
+    /**
+     * enable camera
+     * @returns success or error string
+     */
+    cameraOn(): Promise<"error" | "success">;
+    /**
+     * disable camera
+     */
+    cameraOff(): void;
+    /**
+     * mute mic
+     */
+    mute(): void;
+    /**
+     * unmute mic
+     */
+    unmute(): void;
 }
 /**
  * options to initialize call
@@ -53,6 +78,6 @@ declare class CallRequest {
      */
     reject(): void;
 }
-type CallEvent = "localStream" | "remoteStream";
+type CallEvent = 'localStream' | 'remoteStream' | 'error';
 export default Call;
 export { CallOptions, CallRequest, CallData };

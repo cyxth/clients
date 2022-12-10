@@ -110,6 +110,12 @@ declare class Cxyth {
      */
     addUsers(channelId: string, userIds: string[]): Promise<unknown>;
     /**
+     * get users in a channel
+     * @param channelId channel to get users
+     * @returns users array
+     */
+    usersInChannel(channelId: String): Promise<unknown>;
+    /**
      * update a channel
      * @param channelId
      * @param options
