@@ -11,21 +11,18 @@ interface Message {
     rdate: Date;
 }
 /**
- * SendMessage
+ * message body
  */
-interface SendMessage {
-    text: string;
-    media?: any;
+interface MessageBody {
+    media?: FileList;
+    data?: any;
 }
 /**
- * message sending options
+ * message delivery
  */
-interface MessageOptions {
-}
-/**
- * message output
- */
-interface MessageOutput {
+interface MessageDelivery {
+    status: string;
+    id: string;
 }
 /**
  * parsed message content
@@ -49,11 +46,12 @@ interface MessageDeleteOptions {
     soft?: boolean;
 }
 /**
- * message deleted
+ * sending options
  */
-interface MessageDeleted {
-    deleted: boolean;
-    soft?: boolean;
+interface SendOptions {
+    /** wait for delivery report defaults to true */
+    deliveryReport: boolean;
+    progressHandler: Function;
 }
 /**
  * message edit
@@ -61,15 +59,4 @@ interface MessageDeleted {
 interface MessageUpdate extends MessageDelete {
     content: string;
 }
-/**
- * message edit options
- */
-interface MessageEditOptions {
-}
-/**
- * message was edited
- */
-interface MessageEdited {
-    edited: boolean;
-}
-export { Message, NewMessage, MessageContent, MessageDelete, MessageDeleteOptions, MessageDeleted, MessageEditOptions, MessageEdited, MessageOptions, SendMessage, MessageOutput, MessageUpdate };
+export { Message, NewMessage, MessageContent, MessageDelete, MessageDeleteOptions, MessageBody, MessageDelivery, MessageUpdate, SendOptions };

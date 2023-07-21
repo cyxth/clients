@@ -1,6 +1,6 @@
 {
     "name": "@cyxth/node",
-    "version": "0.0.2-alpha0",
+    "version": "0.0.2",
     "homepage": "https://cyxth.com/docs",
     "repository": {
         "url": "https://github.com/cyxth/js-clients"
