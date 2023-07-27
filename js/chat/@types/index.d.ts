@@ -131,7 +131,7 @@ export default class Cyxth {
      * @param message message to send
      * @returns the delivered message
      */
-    sendMessage(channelId: string, message: MessageBody, options?: SendOptions): Promise<MessageDelivery>;
+    send(channelId: string, message: MessageBody, options?: SendOptions): Promise<MessageDelivery>;
     /**
      * edit a message
      * @param channelId channel id

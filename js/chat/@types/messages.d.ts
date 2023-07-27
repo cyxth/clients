@@ -2,13 +2,20 @@
  * cyxth message
  */
 interface Message {
-    sender_id: string;
-    channel_id: string;
-    id: string;
-    text?: string;
-    media?: any;
-    date: string;
-    rdate: Date;
+    userId: string;
+    channelId: string;
+    messageId: string;
+    content: MessageContent;
+    timestamp: Date;
+    type: "activity" | "message" | "private";
+    activity?: ChannelActivity;
+}
+/*** channel activity */
+interface ChannelActivity {
+    event: "join" | "leave" | "create" | string;
+    scope: "channel" | string;
+    sender: string;
+    data?: any;
 }
 /**
  * message body
@@ -32,12 +39,6 @@ interface MessageContent {
     media?: any;
     meta?: string;
 }
-interface NewMessage {
-    text: string;
-    message_id: string;
-    channel: string;
-    sender: string;
-}
 interface MessageDelete {
     channel_id: string;
     id: string;
@@ -59,4 +60,4 @@ interface SendOptions {
 interface MessageUpdate extends MessageDelete {
     content: string;
 }
-export { Message, NewMessage, MessageContent, MessageDelete, MessageDeleteOptions, MessageBody, MessageDelivery, MessageUpdate, SendOptions };
+export { Message, MessageContent, MessageDelete, MessageDeleteOptions, MessageBody, MessageDelivery, MessageUpdate, SendOptions };
