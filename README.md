@@ -2,21 +2,19 @@
 
 cyxth client sdks for various platforms
 
-## web sdk
+## cyxth web
 
-these are our latest the latest packages, they may not be on npm yet, for stability use our [npm packages](https://www.npmjs.com/org/cyxth).
-
-## more platforms
+these are our latest packages available for beta testers that may not be on npm yet, for stability use our [npm packages](https://www.npmjs.com/org/cyxth).
 
 sdks for other platforms will be available soon.
 
-## beta tester
+## beta testing
 
-cyxth is private beta testing, wanna try it out. [become a beta tester](https://app.cyxth.com/beta-program). add your email we will send you a reply when accepted.
+cyxth is private beta testing, if you'd like to try it out. [drop your email here](https://app.cyxth.com/beta-program) to get started today.
 
 ### development
 
 note that cyxth is still in development and the api is subject to change any time.  
 don't use it in production just yet.
 
-<p>&copy cyxth 2023</p>
+<p>&copy cyxth 2024</p>

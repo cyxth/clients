@@ -1,0 +1,18 @@
+{
+	"name": "@cyxth/colab-wasm",
+	"version": "0.0.1-beta.0",
+	"homepage": "https://cyxth.com/docs",
+	"icon": "https://cyxth.com/favicons/android-chrome-512x512.png",
+	"markdown": "github",
+	"description": "fast and scalable realtime collaboration apis",
+	"main": "./colab.wasm",
+	"scripts": {},
+	"keywords": [
+		"cyxth",
+		"realtime",
+		"collaboration"
+	],
+	"author": "cyxthdev <dev@cyxth.com>",
+	"license": "BSD-3-Clause",
+	"type": "module"
+}
