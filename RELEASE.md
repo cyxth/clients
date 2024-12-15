@@ -32,3 +32,7 @@ colab 0.0.1-beta.0 -> 0.0.1-beta.1
 colab-wasm 0.0.1-beta.0 -> 0.0.1-beta.1
 core 0.0.1-beta.0 -> 0.0.1-beta.1
 
+### patch 1
+
+colab-wasm 0.0.1-beta.1 -> 0.0.1-beta.2
+colab 0.0.1-beta.1 -> 0.0.1-beta.2
