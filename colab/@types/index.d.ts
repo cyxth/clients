@@ -1,74 +1,63 @@
-import ChangeContext from './change';
+import { type Context } from './change/index';
 /**
- * cyxth collab provides you with an API to easily
- * add real time collaboration to your application in minutes.
+ * Easily turn your app multiplayer with cyxth colab.
  *
  * @example
  * ```ts
  * import Cyxth from '@cyxth/core';
  * import Colab from '@cyxth/colab';
  *
- * const APP_ID = "YOUR_APP_ID";
- * const cyxth = new Cyxth(APP_ID);
- * cyxth.register([Colab]);
+ * const APP_URL = "my-app.cyxth.com"; // appid
+ * const TOKEN = "ey....."; // authorized user token
  *
- * // authorize user check https://docs.cyxth.com/authorize for more info
- * await cyxth.connect(USER_TOKEN_SMH);
- *
+ * const cyxth = await new Cyxth(APP_ID, [Colab]).connect(TOKEN);
  * const colab = await cyxth.colab("https://cdn.cyxth.com/colab@0.0.1.wasm");
  *
- * const stateId = "tasks-01";
- * const initialState = {
- *     tasks:[]
- * };
+ * const stateId ="tasks-uxi"; // state id
+ * await colab.createOrJoin(stateId); // create or join state
  *
- * await cyxth.start(stateId);
+ * const tree = colab.changeContext().tree();
+ * tree.setDefaultHandler((change,userId) => {
+ *  // ...handle change
+ * })
  *
- * colab.change('tasks').getList().push({
- *     date: new Date().toIsoString(),
- *     done: false,
- *     value: "write the docs",
- * });
+ * const state: {tasks: Task[]} = tree.state;
  *
- *colab.on((change) => {...update tasks})
+ * const createTask = (task: Task) => {
+ *  state.tasks.push(task);
+ * }
+ *
+ * const markDone = (index: number, done: boolean) => {
+ *  state.tasks[index].done = done;
+ * }
+ *
+ * // ....
+ *
  * ```
  */
-export default class Colab {
+export default class Colab implements IChannel {
     #private;
     /** state id */
     stateId?: string;
     /** colab wasm url */
     wasmUrl?: string;
+    /** offline status */
+    offline: boolean;
     private constructor();
+    changeContext(): Context;
     private __loadWasm;
     /**
-     *  start a collaboration instance
-     *
-     *  this will fails if
-     * - stateId is not unique or exists
-     * - user is blocked
-     * - collaboration is disabled
-     * @param stateId a unique stateId | channel
-     * @param initialState initial state prior to any changes
-     * @param config collaboration configuration
+     * create a state or join if it exists
      */
-    start(stateId: string, initialState?: any, config?: ColabConfig): Promise<void>;
-    /**
-     * join a collaboration instance
-     * will fail if user is blocked or state with id does not exist
-     * @param stateId state id
-     * @returns an upto date state value
-     */
-    join(stateId: string): Promise<any>;
+    createOrJoin(stateId: string, config?: ColabConfig): Promise<Status>;
     /**
      * load a collaboration instance
      *
      * user must have started or joined the collaboration instance earlier for this to work
      * will fail if user is blocked or state with id does not exist
      * @param stateId state id
-     * @returns an upto date state value
      */
-    load(stateId: string): Promise<any>;
+    load(stateId: string): Promise<Status>;
     /**
      * send presence data to all connected users i.e text selections and cursor positions
      * to enhance the collaboration experience by conveying user intent
@@ -84,118 +73,174 @@ export default class Colab {
      */
     presence(data: any): void;
     /**
-     * change the local state
-     * @param path key path
-     * @returns change context
-     */
-    change(path: KeyPath): ChangeContext;
-    private __innerChange;
-    /**
-     * moderate connected users, user has to be admin in current state to use this
-     *
-     * this involves giving users permissions to view or edit state, give users admin priviledges or block access
-     *
-     *  available permissions include "viewer" | "editor" | "admin" | "no-access"
-     * @param users user ids to moderate
-     * @param permission permission
-     * @returns true if moderated else false
-     */
-    moderateUsers(users: string | string[], permission: CollabPermission): Promise<boolean>;
-    /**
-     * remove users with given id from colab instance,
-     * @param users user id (s) to remove
-     * @returns true if removed else false
-     */
-    removeUsers(users: string | string[]): Promise<boolean>;
-    /**
-     * add users to the colaboration  instance
-     * @param users the users to add
-     * @returns true if added else false
-     */
-    addUsers(users: CollabUser | CollabUser[]): Promise<boolean>;
-    /**
-     * get active|online users in the colab instance
-     *
-     * to update list irt use `user:join` and `user:leave`
-     * @param allUsers return all users in colab instance, by default this is false and only returns online users
-     * @example
-     * ```ts
-     * let users: CollabUser[] = await  colab.getUsers();
-     *
-     * colab.on("user:join",(user: CollabUser) => {
-     *     //... update list
-     * })
-     *
-     * colab.on("user:leave",(userId: string) => {
-     *     //... update list
-     * })
-     * ```
-     * @returns active users in the colab instance
-     */
-    getUsers(allUsers?: boolean): Promise<CollabUser[]>;
-    /**
-     * listen for events in the collab instance
-     *
-     * check `CollabEvent` for a full list of available events
-     * @example
-     * ```ts
-     * colab.on("user:join",(user: CollabUser) => {
-     *     //... update list
-     * })
-     * ```
+     * listen for colab  events
      * @param event event
-     * @param callback callback
+     * @param handler event handler function
+     * @example
+     * ```ts
+     * colab.on("user:join",(user) => {
+     *     //... update list
+     * })
      */
-    on(event: ColabEvent, callback: (e: any) => void): void;
+    on<K extends keyof ColabEventMap>(event: K, handler: (ev: ColabEventMap[K]) => any): void;
     /**
-     * delete state from server
-     * @param reason optional reason for deleting the state
-     * @returns true or false depending on delete status
+     * toggle offline status.
+     *
+     * cyxth will automatically set offline status when a user goes offline or when the connection is too slow
+     * listen for `user:offline` event in cyxth core or colab
      */
-    delete(reason?: string): Promise<any>;
-    /**
-     * update state configurtion
-     * @param config config
-     * @param addUserEvents set add or remove events, by default adds, set to false to remove events from config
-     * @returns true or false depending on update status
-     */
-    configure(config: ColabConfig, addUserEvents?: boolean): Promise<any> | undefined;
+    toggleOffline(): Promise<void>;
     static pluginId(): string;
-    /** check the health of colab instance */
-    healthCheck(): void;
+    create(stateId: string, config?: ColabConfig): Promise<Status>;
+    join(stateId: string): Promise<Status>;
+    leave(): Promise<Status>;
+    delete(reason?: string): Promise<any>;
+    addUsers(users: string[]): Promise<Status>;
+    delUsers(users: string[]): Promise<Status>;
+    modUsers(users: User[]): Promise<Status>;
+    getUsers(): Promise<User[]>;
+    configure(config: ColabConfig): Promise<Status>;
 }
-/**
- * colab user event, listen for any of these using `on`
- */
-export type ColabUserEvent = 'user:join' | 'user:leave' | 'user:moderate' | 'user:add' | 'user:remove';
-/**
- * colab state event, listen for any of these using `on`
- */
-export type ColabStateEvent = 'state:delete' | 'state:configure';
-/**
- * colab event, listen for any of these using `on`
- */
-export type ColabEvent = ColabUserEvent | 'change' | 'presence' | ColabStateEvent;
-/**
- * user permissions in colab instance
- */
-export type CollabPermission = 'viewer' | 'editor' | 'admin' | 'no-access';
 /**
  * colab configuration
  */
 export interface ColabConfig {
     /** permission for new users */
-    defaultPermission?: CollabPermission;
-    /** events sent to users,
-     *  by default only join and leave are sent to all users
-     * the rest are only sent to admins
-     */
-    userEvents?: ColabUserEvent[];
+    defaultPermission?: number;
 }
 /** colab user */
-export type CollabUser = string | {
+export interface User {
+    /** user id */
     id: string;
-    permission: CollabPermission;
-};
-/** key path to use in changeContext methods */
-export type KeyPath = string | string[];
+    /** user permission in colab state */
+    mode: number;
+}
+/**operation status*/
+export interface Status {
+    /**operation status*/
+    status: boolean;
+}
+/**
+ * colab channel interface for colab specific operations
+ */
+export interface IChannel {
+    /**
+     * create a new colab state
+     *
+     * fails if state exists at stateId or user has no permissions to create state.
+     * @param stateId state id
+     * @param config state configuration
+     */
+    create(stateId: string, config?: ColabConfig): Promise<Status>;
+    /**
+     * join an existing  colab state
+     *
+     * emits `user:join` event
+     * @param stateId state id
+     */
+    join(stateId: string): Promise<Status>;
+    /**
+     * leave a colab state,
+     *
+     * emits `user:left` event
+     */
+    leave(): Promise<Status>;
+    /**
+     * delete a colab state disconnecting all active users, only the owner (one who started it) can do this
+     * @param reason optionally tell others the reason
+     */
+    delete(reason?: string): Promise<Status>;
+    /**
+     * add users to colab state, users will get `newcolab` notification to join if they are online
+     *
+     * emits `user:add` event
+     * @param users an array of user ids
+     */
+    addUsers(users: string[]): Promise<Status>;
+    /**
+     * remove user from state
+     *
+     * users removed won't be able to join again unless added
+     *
+     * emits `user:del` event
+     * @param users an array of user ids
+     */
+    delUsers(users: string[]): Promise<Status>;
+    /**
+     * moderate users in state  deciding who has edit, view, no-access permissions
+     *
+     *  emits `user:mod` event
+     *
+     * check [concepts](/docs/guides/concepts#permissions) for more about permissions
+     * @param users an array of users
+     */
+    modUsers(users: User[]): Promise<Status>;
+    /**
+     * get active colab state users
+     * @returns active users connected to state
+     */
+    getUsers(): Promise<User[]>;
+    /**
+     *  update colab configuration
+     * @param config new configuration
+     * emits `cnl:config` event
+     */
+    configure(config: ColabConfig): Promise<Status>;
+}
+export interface ColabEventMap {
+    /**
+     * user presence events
+     */
+    presence: ColabPresenceEvent;
+    /** config updated */
+    'cnl:config': {
+        senderId: string;
+        config: ColabConfig;
+    };
+    /** user created channel, event sent to initial users in channel to join call */
+    'cnl:create': {
+        senderId: string;
+        config: ColabConfig;
+    };
+    /** channel deleted */
+    'cnl:delete': {
+        senderId: string;
+        reason?: string;
+    };
+    /** a user joined call, may not have published tracks yet */
+    'user:join': {
+        user: User;
+    };
+    /** a user left call */
+    'user:left': {
+        userId: string;
+    };
+    /** users were added to call */
+    'user:add': {
+        users: User[];
+    };
+    /** call user delete */
+    'user:del': {
+        users: string[];
+        senderId: string;
+    };
+    /** user moderated */
+    'user:mod': {
+        users: User[];
+        senderId: string;
+    };
+}
+export interface ColabPresenceEvent {
+    /**
+     * user who sent presence data
+     */
+    userId: string;
+    /**
+     * state presence data
+     */
+    data: ArrayBuffer | any;
+    /**
+     * type of data
+     */
+    type: 'object' | 'binary';
+}

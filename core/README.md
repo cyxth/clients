@@ -1,54 +1,44 @@
 # @cyxth/core
 
-this is the main entry for your cyxth applications, it handles server connection and authentication and binds all cyxth plugins to work together.
+This is the main entry for your cyxth applications, it handles server connection and authentication and binds all cyxth plugins to work together.
 
-installation
+Install `@cyxth/core` you will also need one or more core plugins i.e `Colab`, `Chat` or `Calls` to get started.
 
 ```sh
-# install core
-npm install @cyxth/core
-
-
-# you will need one or more of this core plugins
-npm install @cyxth/chat
-npm install @cyxth/calls
-npm install @cyxth/colab
-
-# ... more cyxth plugins
+npm install @cyxth/core @cyxth/colab
 ```
 
-an example for a chat application with calls and chat
+Example of a cyxth application with calls and chat.
 
-```js
+```ts
 import Cyxth from '@cyxth/core';
 import Calls from '@cyxth/calls';
 import Chat from '@cyxth/chat';
 
-const cyx = new Cyxth("YOUR_APP_URL");
+const APP_URL = "my-app.apps.cyxth.com";
+const USER_TOKEN = "token_from_backend";
 
-// register required plugins
-cyx.register([
-    Calls,
-    Chat
-]);
+const cyxth = await new Cyxth(APP_URL,[Calls,Chat]).connect(TOKEN);
 
-//connect a user to cyxth
-await cyx.connect("USER_TOKEN");
+const calls: Calls = cyxth.calls();
+const chat: Chat = cyxth.chat();
 
-cyx.on('error', (data) => {
-    // show error
-})
+// ... your custom app logic goes here
+calls.on("call:new", (data) => {
+    callNotify(data)
+});
 
-cyx.on('disconnect',data => {
-    console.log(`disconnected ${data.reason}`)
-})
+const hangUp = async () => {
+    await call.leave();
+};
 
-//... app logic
 
 ```
 
-read more
+Read More
 
-[getting started with cyxth](https://cyxth.com/docs/getting-started)  
-[authorization](https://cyxth.com/docs/authorization)  
-[client reference](https://cyxth.com/docs/reference/classes/core.Cyxth)  
+[cyxth guides](https://cyxth.com/docs/guides).
+
+[cyxth reference](https://cyxth.com/docs/reference).  
+
+[REST API](https://cyxth.com/docs/restapi).  

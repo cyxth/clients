@@ -17,4 +17,4 @@ cyxth is private beta testing, if you'd like to try it out. [drop your email her
 note that cyxth is still in development and the api is subject to change any time.  
 don't use it in production just yet.
 
-<p>&copy cyxth 2024</p>
+cyxth 2024

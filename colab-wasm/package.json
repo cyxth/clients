@@ -1,16 +1,18 @@
 {
 	"name": "@cyxth/colab-wasm",
-	"version": "0.0.1-beta.0",
-	"homepage": "https://cyxth.com/docs",
-	"icon": "https://cyxth.com/favicons/android-chrome-512x512.png",
+	"version": "0.0.1-beta.1",
+	"homepage": "https://cyxth.com",
+	"icon": "https://s4c.cyxth.com/logo_03.png",
 	"markdown": "github",
-	"description": "fast and scalable realtime collaboration apis",
+	"description": "turn your app multiplayer -cyxth",
 	"main": "./colab.wasm",
 	"scripts": {},
 	"keywords": [
 		"cyxth",
 		"realtime",
-		"collaboration"
+		"collaboration",
+    "multiplayer",
+    "crdt"
 	],
 	"author": "cyxthdev <dev@cyxth.com>",
 	"license": "BSD-3-Clause",

@@ -21,3 +21,14 @@ auth now uses EdDSA public key for authentication instead of HS256 shared keys.
 
 1. `@cyxth/node` 0.0.3-beta.0 -> ❌
 2. `@cyxth/auth` na -> 0.0.1-beta.0
+
+
+## dec 15 release 
+
+auth 0.0.1-beta.0 -> 0.0.1-beta.1
+calls 0.0.4-beta.0 -> 0.0.4-beta.1
+chat 0.0.8-beta.0 -> 0.0.8-beta.1
+colab 0.0.1-beta.0 -> 0.0.1-beta.1
+colab-wasm 0.0.1-beta.0 -> 0.0.1-beta.1
+core 0.0.1-beta.0 -> 0.0.1-beta.1
+

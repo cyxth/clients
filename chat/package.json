@@ -1,11 +1,11 @@
 {
     "name": "@cyxth/chat",
-    "version": "0.0.8-beta.0",
-    "homepage": "https://cyxth.com/docs",
-    "icon": "https://cyxth.com/favicons/android-chrome-512x512.png",
+    "version": "0.0.8-beta.1",
+    "homepage": "https://cyxth.com",
+    "icon": "https://s4c.cyxth.com/logo_03.png",
     "markdown": "github",
     "readme": "README.md",
-    "description": "fast and scalable realtime collaboration apis",
+    "description": "turn your app multiplayer -cyxth",
     "main": "dist/index.min.js",
     "scripts": {},
     "keywords": [
@@ -13,7 +13,8 @@
         "realtime",
         "collaboration",
         "chat",
-        "call"
+        "call",
+        "multiplayer"
     ],
     "author": "cyxthdev <dev@cyxth.com>",
     "license": "BSD-3-Clause",

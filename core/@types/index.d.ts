@@ -2,114 +2,96 @@ export default class Cyxth {
     #private;
     /** cyxth app url from cyxth console https://app.cyxth.com */
     appUrl: string;
-    /** check whether user is connected to cyxth servers*/
+    /** user connection status*/
     connected: boolean;
     /**
      * create a new cyxth instance
+     *
      * @param appUrl cyxth app url from cyxth console https://app.cyxth.com
+     * @param plugins | cyxth modules i.e Colab, Chat and Calls. you need atleast one of the core modules
+     *
+     * @example
+     *
+     * ```ts
+     * import Cyxth from '@cyxth/core';
+     * import Colab from '@cyxth/colab';
+     * import Calls from '@cyxth/calls';
+     *
+     * const APP_URL = "my-app.apps.cyxth.com";
+     * const cyxth = new Cyxth(APP_URL, [Colab,Calls])
+     * ```
      */
-    constructor(appUrl: string);
-    /**
-     * generates a pkce challenge in browser
-     * @returns a promise with the generated pkce {codeVerifier, codeChallenge}
-     */
-    generatePkce(): Promise<{
-        codeVerifier: string;
-        codeChallenge: string;
-    }>;
+    constructor(appUrl: string, plugins?: any[]);
     /**
      * connect to cyxth realtime servers
      *
      * use your unique generated token
      * @param token user auth token
+     * @returns {@link Cyxth | Cyxth}
      */
-    connect(token: string | TokenData): Promise<boolean>;
+    connect(token: string | TokenData): Promise<Cyxth>;
     /**
      * disconeect from cyxth server
      * @returns true
      */
     disconnect(): boolean;
     /**
-     * register modules| plugins to use in cyxth instance
-     * core plugins include `Colab`, 'Chats', 'Calls'
-     * @param mods an array of cyxth modules|plugins
-     */
-    register(mods: any[]): void;
-    /**
-     * get a colab instance i.e
+     * get a colab instance
      *
      * ``` ts
      *  import Cyxth from '@cyxht/core';
      *  import Colab from '@cyxth/colab';
      *
-     *  const cyx = new Cyxth(YOUR_APP_URL);
-     *  cyx.register([Colab])
+     *  const APP_URL = "my-app.apps.cyxth.com"; // app id
+     *  const TOKEN = "e....."; // user auth token
      *
-     *  // ensure user is connected
-     *  await cyx.connect('USER_TOKEN')
-     *
-     *  // then use colab
-     *  let colab: Colab = await cyx.collab("https://cdn.cyxth.com/colab_0.0.1.wasm");
+     *  const cyxth = await new Cyxth(APP_URL, [Colab]).connect(TOKEN);
+     *  const colab = await cyxth.colab("https://cdn.cyxth.com/colab_0.0.1.wasm");
      * ```
-     * @param wasmUrl wasm binary url
+     *
+     * @param wasmUrl colab-wasm binary url
      * @returns Colab
      */
     colab(wasmUrl?: string): Promise<any>;
     /**
-     * get a chat instance i.e
+     * get a chat instance
      *
      * ``` ts
      *  import Cyxth from '@cyxht/core';
      *  import Chat from '@cyxth/chat';
      *
-     *  const cyx = new Cyxth(YOUR_APP_URL);
-     *  cyx.register([Chat])
+     *  const APP_URL = "my-app.apps.cyxth.com"; // app id
+     *  const TOKEN = "e....."; // user auth token
      *
-     *  // ensure user is connected
-     *  await cyx.connect('USER_TOKEN')
-     *
-     *  // then use chat
-     *  let chat: Chat = cyx.chat();
-     *
-     *  chat.on("message", (message: Message) => {
-     * 	 // ... handle message
-     * })
+     *  const cyxth = await new Cyxth(APP_URL, [Chat]).connect(TOKEN);
+     *  const chat = cyxth.chat();
      * ```
+     *
      * @returns Chat
      */
     chat(): any;
     /**
-     * calls - video, audio, group conferences functionality
+     * calls - video and audio call functionality
      *
-     * ``` ts
+     * ```ts
      *  import Cyxth from '@cyxht/core';
      *  import Calls from '@cyxth/calls';
      *
-     *  const cyx = new Cyxth(YOUR_APP_URL);
-     *  cyx.register([Calls])
+     *  const APP_URL = "my-app.apps.cyxth.com"; // app id
+     *  const TOKEN = "e....."; // user auth token
      *
-     *  // ensure user is connected
-     *  await cyx.connect('USER_TOKEN')
-     *
-     *  // then use chat
-     *  let call: Calls = cyx.calls("channel_id");
-     *
-     *  await call.start({audio: true, video: true});
-     *  call.on("connected", (data) => {
-     *    // ...
-     * })
-     *  call.on("join",(data) => {
-     *   // ...
-     * })
-     *
-     * // call.end()
-     * // call.leave()
-     * // ...
+     *  const cyxth = await new Cyxth(APP_URL, [Calls]).connect(TOKEN);
+     *  const calls = cyxth.calls();
      * ```
-     * @returns Chat
+     * @returns Calls
      */
-    calls(channel: string): any;
-    on(event: CyxthEvent, cb: Function): void;
+    calls(): any;
+    /**
+     * listen for disconnect and error events
+     * @param event
+     * @param handler function
+     */
+    on<K extends keyof CyxthEventMap>(event: K, handler: (data: CyxthEventMap[K]) => any): void;
 }
 /**
  * token data to pass from `createToken` in cyxth backend modules
@@ -119,6 +101,16 @@ export interface TokenData {
     code_challenge: string;
     code_verifier: string;
 }
-/** cyxth events */
-type CyxthEvent = 'new-call' | 'disconnect' | 'error';
-export {};
+/**
+ * cyxth event map
+ */
+export interface CyxthEventMap {
+    "disconnect": {
+        reason: string;
+        code: number;
+    };
+    "error": {
+        code: string;
+        message: string;
+    };
+}

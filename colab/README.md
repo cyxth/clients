@@ -2,98 +2,75 @@
 
 This module adds realtime collaboration capabilities to your application similar to figma and google docs.
 
-internally powered by CRDTs ensuring state consistency and fast synchronization across multiple collaborators.
+cyxth colab ensures that your state is always consistent across all users by automatically
+resolving conflicts while still being very fast and scalable.
 
-paired with cyxth call's  audio and video call features unlocks a richer collaboration experience for your users.
 
-install packages
+## installation
+
+install cyxth core and colab packages
 
 ```sh
-# cyxth core
-npm install @cyxth/core
-
-# cyxth colab
-npm install @cyxth/colab
+npm install @cyxth/core @cyxth/colab
 ```
 
-initialize collaboration
+## initialize
 
-```js
+connect to cyxth and initialize cyxth colab
+
+```ts
 import Cyxth from '@cyxth/core';
 import Colab from '@cyxth/colab';
 
-// initialize cyxth
-const cyxth = new Cyxth("YOUR_APP_URL");
+const APP_URL = "my-app.apps.cyxth.com";
+const USER_TOKEN = "token_from_backend";
 
-// add collab plugin
-cyxth.register([Colab]);
+const cyxth = await new Cyxth("YOUR_APP_URL", [Colab]).connect(USER_TOKEN);
+const colab = await cyxth.colab()
 
-// authorize user
-// check https://cyxth.com/docs/authorize for more info
-await cyxth.connect(USER_TOKEN_SMH);
-
-// use the colab wasm package from cdn
-const wasmUrl = "https://cdn.cyxth.com/colab@0.0.1.wasm";
-
-const colab = await cyxth.colab(wasmUrl);
 ```
 
-creating a collaboration instance
+## text example
 
-```js
+a simple text example.
+
+```ts
 // ...
 
-const initTasks = async () => {
-    const stateId = "tasks-01";
-    const initialState = {
-        tasks:[]
-    }
+const state = await colab.createOrJoin("our-shared-doc");
+const doc = state.changeContext().text("doc");
 
-    try {
-        await colab.start(stateId, intialState, {
-            defaultPermission: "viewer"
-        })
-    }catch(e) {
-        // .. handle errors
-    }
+doc.handlers = {
+  insert(index, text, ctx) {
+    console.log(ctx.userId);
+    // update doc in ui
+  }
+
+  delete(fragments, ctx) {
+    console.log(ctx.userId);
+    // remove fragments
+  }
+}
+
+const editDoc = (index: number, text: string, delCount:number) => {
+   doc.replace(index, text, delCount)
 }
 
 // ...
 ```
 
-mutating state
+dive in deeper for multiplayer text editing with the monaco multiplayer markdown
+editor example [here](https://cyxth.com/docs/guides/editor).
 
-```js
-let taskList = colab.change("tasks").getList();
+## more data types
 
-await taskList.insert(2,{
-    date: new Date().toIsoString(),
-    done: false,
-    tags: ["code","docs"],
-    value: "write the docs",
-})
+cyxth has two other data types [`Tree`](https://cyxth.com/docs/reference/interfaces/colab_change.Tree) and [`Counter`](https://cyxth.com//docs/reference/interfaces/colab_change.Counter). with tree you can
+represent and json data and counter is a simple increment decrement counter.
 
-// ...
-```
+## read more  
 
-collaborative text editing
+multiplayer concepts with cyxth with examples [here](https://cyxth.com/docs/colab).  
 
-```js
-let doc = colab.change('doc').getText();
-await doc.insert(0,"hello world");
+a multiplayer svg editor example  [here](https://cyxth.com/docs/guides/draw).  
 
-//...
-```
-
-listening for changes
-
-```js
-colab.on("change",(data) => {
-    //... handle changes
-})
-```
-
-read more  
-[colab docs](https://cyxth.com/docs/collaboration)  
-[colab examples](https://cyxth.com/docs/demos?filter=colab)  
-[colab reference](https://cyxth.com/docs/reference/classes/colab.Colab)  
+the [colab reference](https://cyxth.com/docs/reference/classes/colab.Colab)  

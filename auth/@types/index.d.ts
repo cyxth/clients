@@ -49,23 +49,17 @@ interface UserInfo {
      */
     id: string;
     /**
-     * whether this user's data should  be saved,
-     * all the other fields will be ignored if true
-     */
-    isTemporary?: boolean;
-    /**
-     * for newer users. to save to saved users use the REST api to add users beforehand for this
-     * for faster logins. if the user is already saved only id is required
-     */
-    data?: any;
-    /**
-     * join given channels on authorized. these channels has the devloper as the sole admin
+     * join given channels on authorized. these channels has the devloper as the only admin
+     *
+     * useful for general groups that each user must join.
      */
     channels?: InitialChannel[];
     /**
-     * user access level across the instance by default editor
+     * user permissions
+     *
+     * for more info about permissions check [permissions guide](/docs/guides/concepts#permissions)
      */
-    access?: 'admin' | 'viewer' | 'editor' | 'no-access';
+    mode?: number;
 }
 /**
  * token options
@@ -73,12 +67,16 @@ interface UserInfo {
 interface TokenOptions {
     /**
      * token expiration duration.
+     *
      *  by default 12 hr, with a max of 3 days.
+     *
      *  Valid units are: "sec", "secs", "second", "seconds", "s", "minute", "minutes", "min", "mins", "m", "hour", "hours", "hr", "hrs", "h", "day", "days", "d", "week", "weeks", "w", "year", "years", "yr", "yrs", and "y". It is not possible to specify months. 365.25 days is used as an alias for a year.
      */
     duration?: string;
     /**
-     * whether to create pkce challenges. by default this is false and the tokens are created in the client
+     * whether to create pkce challenges (proof key for code exchange). by default this is false so pkce is created in browser.
+     *
+     * note: its recommended to leave this as false, only works with mordern browsers that support subtle crypto.
      */
     pkce?: boolean;
 }
@@ -106,7 +104,7 @@ interface InitialChannel {
     /** channel id */
     id: string;
     /** user access level in channel */
-    mode?: 'admin' | 'viewer' | 'editor' | 'no-access';
+    mode?: number;
     /** user data in channel */
     data?: any;
 }

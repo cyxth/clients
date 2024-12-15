@@ -1,39 +1,35 @@
 # cyxth chat api
 
-Easily add fast and scalable chat functionality to your application
-with cyxth chat api.
+a simple chat api built on top of cyxth to add 
+chat functionality to your multiplayer applications.
 
-install the packages
+## installation
 
 ```sh
-#  core
-npm install @cyxth/core
-
-#  chat
-npm install @cyxth/chat
+npm install @cyxth/core @cyxth/chat
 ```
 
-initialize cyxth chat
+## initialize
 
-```js
+initialize cyxth core and chat 
+
+```ts
 import Cyxth from '@cyxth/core';
 import Chat from '@cyxth/chat';
 
-// initialize cyxth
-const cyxth = new Cyxth("YOUR_APP_URL");
+const APP_URL = "my-app.apps.cyxth.com";
+const USER_TOKEN = "token_from_backend";
 
-// add the chat plugin
-cyxth.register([Chat]);
+const cyxth = await new Cyxth("YOUR_APP_URL", [Chat]).connect(USER_TOKEN);
+const chat = cyxth.chat();
 
-// authorize user
-// check https://cyxth.com/docs/authorize for more info
-await cyxth.connect(USER_TOKEN_SMH);
-const chat: Chat = cyxth.chat();
 ```
 
-sending a message
+## send a message
 
-```js
+to send a message simply
+
+```ts
 // ..
 // simple text message
 chat.send("channelId", "hello world");
@@ -51,16 +47,44 @@ chat.send("channelId", {
 // ...
 ```
 
-receive and handle messages
+## receive and handle messages
 
-```js
+and listen for incoming messages too ...
+
+```ts
 chat.on("message",(msg) => {
     console.log(`message on ${msg.channelId} from ${msg.sender}`,msg)
 })
 ```
 
+## message tree & history 
+
+cloud message storage can be enabled or offline storage so you can `getMessages`.
+
+```ts
+getMessages(
+ start: Date | string,
+ limit: number = 50,
+ channels: undefined | string | string[] = undefined,
+ direction: 'reverse' | 'forward' = 'forward'
+): Promise<{ [key: string]: Message[] }>
+```
+
+i.e 
+
+```ts
+// using id and limit, 150 is max at once
+chat.channnels
+ .getMessages('7085164563653595136', 150)
+ .then((messages) => {
+  console.log(messages);
+ });
+```
+
+... 
+
 read more  
-[cyxth quick start](https://cyxth.com/docs/simple-chat)  
+
+[chat guide](https://cyxth.com/docs/guides/chat)
+
 [chat reference](https://cyxth.com/docs/reference/classes/chat.Chat)  
-[chat example](https://cyxth.com/docs/advanced-chat)  
-[cyxth docs](https://cyxth.com/docs)

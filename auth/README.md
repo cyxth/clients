@@ -5,7 +5,6 @@ authorize users to use your cyxth instance
 ## installation
 
 ```bash
-# install
 npm install @cyxth/auth
 ```
 
@@ -19,16 +18,15 @@ const PRIVATE_KEY = env(PRIVATE_KEY);
 const auth = new AUTH(APP_ID,PRIVATE_KEY);
 
 
-const user = {
-     id: "alice"
-}
-const token = auth.createToken(user,{duration: '4h' })
-// send token to frontend
+const user = {id: "alice"}
+
+const token = auth.createToken(user,{duration: '1h' })
+
+// send token to your frontend to use in connect() function
 console.log(token)
-// and we get something like
-// {token: "eyJhbGciOi.............-b0FjCQqTUEb_lHo2eUAUMdXgvRAA",}
+
+// something {token: "eyJhbGciOi.............-b0FjCQqTUEb_lHo2eUAUMdXgvRAA",}
 
 ```
 
-read more
-[authorization examples](https://cyxth.com/docs/authorization)
+read more on the [authorization guide](https://cyxth.com/docs/guides/authorization).

@@ -1,27 +1,16 @@
 # colab-wasm
 
-colab wasm module for `@cyxth/colab` package.
+Colab wasm module for `@cyxth/colab` package.
 
-how to use
+You can choose to add this locally to your public or static folder. 
+ensure colab version matches the wasm version if you do so.
 
-locally add the colab.wasm file to your static folder and reference it
-
-```js
-//...
-
+```ts
 const colab = await cyxth.colab("colab.wasm");
 
-//...
 ```
 
-or use it from a cdn
+By default this module will be loaded automatically from our cdns. 
+It might be faster to load it from your server so we recommend using the above method.
 
-```js
-const wasmUrl = "https://cdn.cyxth.com/colab@0.0.1.wasm";
-const colab = await cyxth.colab(wasmUrl);
-```
-
-note: ensure colab version match with colab-wasm
-
-read more  
-[cyxth docs](https://cyxth.com/docs)
+Read more on the [colab guide](https://cyxth.com/docs/guides/colab)
